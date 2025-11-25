@@ -1,0 +1,333 @@
+<%
+    // Variáveis que vêm da rota
+    const troca = locals.troca;
+    const currentUserId = locals.userId;
+
+    // Itens e usuários envolvidos
+    const itemOferecido = troca.itemOferecido;
+    const itemDesejado = troca.itemDesejado;
+   
+    // Proponente = quem INICIOU a troca (ofereceu o itemOferecido)
+    // Receptor = dono do itemDesejado
+    const proponenteUser = itemOferecido.usuario;
+    const receptorUser = itemDesejado.usuario;
+    const isProponente = troca.ProponenteId === currentUserId;
+    const isReceptor = troca.ReceptorId === currentUserId;
+
+    // Buscar imagens principais
+    let imagemOferecido = null;
+    let imagemDesejado = null;
+
+    if (itemOferecido.imagens && itemOferecido.imagens.length > 0) {
+        const imagensOferecido = [...itemOferecido.imagens].sort((a, b) => a.ordem - b.ordem);
+        imagemOferecido = imagensOferecido.find(img => img.is_principal) || imagensOferecido[0];
+    }
+
+    if (itemDesejado.imagens && itemDesejado.imagens.length > 0) {
+        const imagensDesejado = [...itemDesejado.imagens].sort((a, b) => a.ordem - b.ordem);
+        imagemDesejado = imagensDesejado.find(img => img.is_principal) || imagensDesejado[0];
+    }
+%>
+
+<div class="modal-troca-details">
+   
+    <div class="modal-header">
+        <h2 class="modal-title">Detalhes da Proposta de Troca</h2>
+        <span class="troca-status status-<%= troca.status.toLowerCase() %>"><%= troca.status %></span>
+    </div>
+   
+    <div class="troca-meta">
+        <div class="meta-item">
+            <i class="fas fa-calendar"></i>
+            <span>Criada em: <strong><%= new Date(troca.createdAt).toLocaleDateString('pt-BR') %></strong></span>
+        </div>
+        <% if (troca.dataAceite) { %>
+        <div class="meta-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Aceita em: <strong><%= new Date(troca.dataAceite).toLocaleDateString('pt-BR') %></strong></span>
+        </div>
+        <% } %>
+    </div>
+
+    <div class="items-comparison">
+        <div class="item-card item-oferecido">
+            <div class="card-header">
+                <h3 class="card-subtitle">Item Oferecido</h3>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><strong><%= proponenteUser.nome %></strong> • <%= proponenteUser.cidade %></span>
+                </div>
+            </div>
+           
+            <div class="item-details">
+                <!-- FOTO DESTACADA -->
+                <div class="photo-section">
+                    <% if (imagemOferecido) { %>
+                        <div class="item-photo-container">
+                            <img src="<%= imagemOferecido.caminho_arquivo %>" 
+                                 alt="<%= itemOferecido.peca %>"
+                                 class="item-photo-real">
+                            <div class="photo-overlay">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="item-photo-placeholder">
+                            <i class="fas fa-tshirt fa-2x"></i>
+                            <span>Imagem não disponível</span>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="item-info">
+                    <div class="info-row">
+                        <i class="fas fa-tag"></i>
+                        <div>
+                            <strong class="item-name"><%= itemOferecido.peca %></strong>
+                            <span class="item-category"><%= itemOferecido.categoriaPeca %></span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-ruler"></i>
+                            <span>Tamanho: <strong><%= itemOferecido.tamanho %></strong></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-palette"></i>
+                            <span>Cor: <strong><%= itemOferecido.cor || 'Não informada' %></strong></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Estação: <strong><%= itemOferecido.estacao || 'Todas' %></strong></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-star"></i>
+                            <span>Condição: <strong><%= itemOferecido.condicao %></strong></span>
+                        </div>
+                    </div>
+                    
+                    <% if (itemOferecido.descricao) { %>
+                    <div class="description-box">
+                        <i class="fas fa-align-left"></i>
+                        <p><%= itemOferecido.descricao %></p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="troca-icon">
+            <div class="exchange-arrow">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div class="troca-symbol">
+                <i class="fas fa-handshake"></i>
+            </div>
+        </div>
+        <div class="item-card item-desejado">
+            <div class="card-header">
+                <h3 class="card-subtitle">Item Desejado</h3>
+                <div class="user-info">
+                    <i class="fas fa-user"></i>
+                    <span><strong><%= receptorUser.nome %></strong> • <%= receptorUser.cidade %></span>
+                </div>
+            </div>
+            <div class="item-details">
+                <!-- FOTO DESTACADA -->
+                <div class="photo-section">
+                    <% if (imagemDesejado) { %>
+                        <div class="item-photo-container">
+                            <img src="<%= imagemDesejado.caminho_arquivo %>" 
+                                 alt="<%= itemDesejado.peca %>"
+                                 class="item-photo-real">
+                            <div class="photo-overlay">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="item-photo-placeholder">
+                            <i class="fas fa-tshirt fa-2x"></i>
+                            <span>Imagem não disponível</span>
+                        </div>
+                    <% } %>
+                </div>               
+                <div class="item-info">
+                    <div class="info-row">
+                        <i class="fas fa-tag"></i>
+                        <div>
+                            <strong class="item-name"><%= itemDesejado.peca %></strong>
+                            <span class="item-category"><%= itemDesejado.categoriaPeca %></span>
+                        </div>
+                    </div>                   
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-ruler"></i>
+                            <span>Tamanho: <strong><%= itemDesejado.tamanho %></strong></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-palette"></i>
+                            <span>Cor: <strong><%= itemDesejado.cor || 'Não informada' %></strong></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Estação: <strong><%= itemDesejado.estacao || 'Todas' %></strong></span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-star"></i>
+                            <span>Condição: <strong><%= itemDesejado.condicao %></strong></span>
+                        </div>
+                    </div>                    
+                    <% if (itemDesejado.descricao) { %>
+                    <div class="description-box">
+                        <i class="fas fa-align-left"></i>
+                        <p><%= itemDesejado.descricao %></p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <div class="modal-actions-summary">
+        <div class="actions-header">
+            <i class="fas fa-cogs"></i>
+            <h4>Ações e Status da Troca</h4>
+        </div>
+       
+        <!-- LÓGICA DE EXIBIÇÃO DOS BOTÕES -->
+        <% if (troca.status === 'Pendente') { %>
+            <% if (isReceptor) { %>
+                <!-- RECEPTOR vê botões de Aceitar/Rejeitar -->
+                <div class="action-panel pending">
+                    <div class="action-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="action-content">
+                        <h5>Proposta Recebida</h5>
+                        <p><strong><%= proponenteUser.nome %></strong> quer trocar <strong>"<%= itemOferecido.peca %>"</strong> pelo seu <strong>"<%= itemDesejado.peca %>"</strong></p>
+                        <div class="action-buttons">
+                            <form method="POST" action="/trocas/aceitar/<%= troca.id %>">
+                                <button type="submit" class="btn-action btn-success">
+                                    <i class="fas fa-check"></i> Aceitar Troca
+                                </button>
+                            </form>
+                            <form method="POST" action="/trocas/rejeitar/<%= troca.id %>">
+                                <button type="submit" class="btn-action btn-danger">
+                                    <i class="fas fa-times"></i> Rejeitar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <% } else if (isProponente) { %>
+                <!-- PROPONENTE vê botão de Cancelar -->
+                <div class="action-panel pending">
+                    <div class="action-icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="action-content">
+                        <h5>Proposta Enviada</h5>
+                        <p>Você ofereceu <strong>"<%= itemOferecido.peca %>"</strong> para <strong><%= receptorUser.nome %></strong> em troca de <strong>"<%= itemDesejado.peca %>"</strong></p>
+                        <p><em>Aguardando resposta de <%= receptorUser.nome %>...</em></p>
+                        <div class="action-buttons">
+                            <form method="POST" action="/trocas/cancelar/<%= troca.id %>">
+                                <button type="submit" class="btn-action btn-warning">
+                                    <i class="fas fa-ban"></i> Cancelar Proposta
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <!-- CASO DE SEGURANCA: usuário não envolvido -->
+                <div class="action-panel historical">
+                    <div class="action-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="action-content">
+                        <h5>Acesso Restrito</h5>
+                        <p>Você não tem permissão para visualizar esta troca.</p>
+                    </div>
+                </div>
+            <% } %>
+    
+        <% } else if (troca.status === 'Aceita') { %>
+            <%
+                // Lógica de confirmação para AMBOS os usuários
+                const minhaConfirmacao = isProponente ? troca.proponenteConfirmouFinalizacao : troca.receptorConfirmouFinalizacao;
+                const outraConfirmacao = isProponente ? troca.receptorConfirmouFinalizacao : troca.proponenteConfirmouFinalizacao;
+                const outroUsuario = isProponente ? receptorUser.nome : proponenteUser.nome;
+                
+                // Determinar qual item cada usuário recebe
+                const itemQueRecebo = isProponente ? itemDesejado.peca : itemOferecido.peca;
+                const itemQueOfereci = isProponente ? itemOferecido.peca : itemDesejado.peca;
+            %>
+           
+            <div class="action-panel accepted">
+                <div class="action-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="action-content">
+                    <h5>Troca Aceita!</h5>
+                    <p>Ambos concordaram com a troca. Agora confirme que você recebeu o item.</p>
+                    <div class="trade-summary">
+                        <p><strong>Você recebe:</strong> <%= itemQueRecebo %></p>
+                        <p><strong>Você enviou:</strong> <%= itemQueOfereci %></p>
+                    </div>
+                    <div class="confirmation-status">
+                        <div class="user-confirmation <%= minhaConfirmacao ? 'confirmed' : 'pending' %>">
+                            <div class="confirmation-icon">
+                                <i class="fas fa-<%= minhaConfirmacao ? 'check-circle' : 'clock' %>"></i>
+                            </div>
+                            <div class="confirmation-info">
+                                <strong>Sua confirmação</strong>
+                                <span><%= minhaConfirmacao ? 'Confirmada ✓' : 'Pendente' %></span>
+                            </div>
+                            <% if (!minhaConfirmacao) { %>
+                            <form method="POST" action="/trocas/finalizar/<%= troca.id %>">
+                                <button type="submit" class="btn-confirm">
+                                    <i class="fas fa-check-double"></i> Confirmar Recebimento
+                                </button>
+                            </form>
+                            <% } %>
+                        </div>
+                        <div class="user-confirmation <%= outraConfirmacao ? 'confirmed' : 'pending' %>">
+                            <div class="confirmation-icon">
+                                <i class="fas fa-<%= outraConfirmacao ? 'check-circle' : 'clock' %>"></i>
+                            </div>
+                            <div class="confirmation-info">
+                                <strong><%= outroUsuario %></strong>
+                                <span><%= outraConfirmacao ? 'Confirmou ✓' : 'Aguardando' %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        <% } else if (troca.status === 'Finalizada') { %>
+            <div class="action-panel completed">
+                <div class="action-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="action-content">
+                    <h5>Troca Concluída!</h5>
+                    <p>Troca finalizada com sucesso em <strong><%= troca.dataFinalizacao ? new Date(troca.dataFinalizacao).toLocaleDateString('pt-BR') : 'Data Indisponível' %></strong></p>
+                    <div class="success-message">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Ambas as partes confirmaram o recebimento dos itens.</span>
+                    </div>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="action-panel historical">
+                <div class="action-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="action-content">
+                    <h5>Status: <%= troca.status %></h5>
+                    <p>Esta proposta está no histórico de trocas.</p>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/css/troca-details.css">

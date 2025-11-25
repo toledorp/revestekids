@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barrio&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="/css/login.css" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <img src="/imgs/logo.jpg" alt="ReVeste Kids Logo" class="logo">
+        <h1 class="login-title">ReVeste Kids</h1>
+        <h2 class="welcome-title-barrio">BEM-VINDO(A)!</h2>
+        <br>
+        <% if (messages && Object.keys(messages).length > 0) { %>
+            <div class="message-container">
+                <% if (messages.error) { %>
+                    <% messages.error.forEach(function(msg) { %>
+                        <div class="alert alert-danger"><%= msg %></div>
+                    <% }); %>
+                <% } %>
+                <% if (messages.success) { %>
+                    <% messages.success.forEach(function(msg) { %>
+                        <div class="alert alert-success"><%= msg %></div>
+                    <% }); %>
+                <% } %>
+                <% if (messages.warning) { %>
+                    <% messages.warning.forEach(function(msg) { %>
+                        <div class="alert alert-warning"><%= msg %></div>
+                    <% }); %>
+                <% } %>
+            </div>
+        <% } %>
+        <form action="/login" method="POST" class="login-form">
+            <div class="input-group">
+                <label for="email" class="input-label">Email</label>
+                <input type="email" id="email" name="email" placeholder="seu.email@exemplo.com" class="text-input">
+            </div>
+            <div class="input-group password-field">
+                <label for="senha" class="input-label">Senha</label>
+                <div class="input-with-icon">
+                    <input type="password" id="senha" name="senha" placeholder="sua senha" class="text-input">
+                    <i class="fas fa-eye input-icon" id="password-toggle"></i>
+                </div>
+                <a href="#" class="forgot-password">Esqueceu a senha?</a>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <a href="/cadastro" class="btn btn-secondary">Criar conta</a>
+        <div class="social-login">
+            <p class="social-title">ENTRAR COM</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon" aria-label="Google"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="X"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+    <p class="footer-text">Um produto
+        <a href="https://developersrgt.online/ralkytech/">RalKy Tech</a>
+    </p>
+    <script>
+        const toggleIcon = document.getElementById('password-toggle');
+        const passwordInput = document.getElementById('senha');
+        if (toggleIcon) { 
+            toggleIcon.addEventListener('click', () => {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';    
+                toggleIcon.classList.replace(isPassword ? 'fa-eye' : 'fa-eye-slash', isPassword ? 'fa-eye-slash' : 'fa-eye');
+            });
+        };
+    </script>
+</body>
+</html>
