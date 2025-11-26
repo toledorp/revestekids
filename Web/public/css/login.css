@@ -1,0 +1,180 @@
+:root {
+    --color-primary: #8347AA; --color-secondary: #35eecf; --color-background-mint: #D2FBF4; 
+    --color-gray-text: #6b7280; --color-gray-light: #d1d5db; --color-link: var(--color-primary); 
+    --color-text-dark: #111111; --color-divider: #e5e7eb;
+}
+
+.login-body {
+    background-color: var(--color-background-mint); display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; min-height: 100vh; margin: 0; 
+    font-family: 'Inter', Arial, sans-serif; 
+}
+
+.login-container {
+    background-color: white; padding: 32px; border-radius: 12px;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+    width: 100%; max-width: 448px; text-align: center; margin: 20px auto; box-sizing: border-box; 
+}
+
+.logo {
+    height: 64px; width: 64px; margin: 0 auto 8px; display: block; object-fit: contain; 
+}
+
+.login-title {
+    font-size: 1.5rem; font-weight: bold; color: var(--color-text-dark); margin-bottom: 24px;
+}
+
+.welcome-title-barrio {
+    font-family: 'Barrio', cursive; font-size: 3rem; color: var(--color-text-dark); 
+    text-shadow: 2px 2px 0px var(--color-divider); margin-bottom: 8px; 
+}
+
+.login-subtitle {
+    font-size: 1rem; color: var(--color-gray-text); margin-bottom: 24px;
+}
+
+.login-form {
+    display: flex; flex-direction: column; gap: 15px; 
+}
+
+.input-group {
+    text-align: left;
+}
+
+.input-label {
+    display: block; font-weight: bold; font-size: 0.875rem; color: var(--color-text-dark); 
+    margin-bottom: 4px; 
+}
+
+.text-input {
+    box-sizing: border-box; width: 100%; padding: 8px 12px;
+    border: 1px solid var(--color-gray-light); border-radius: 6px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05); transition: all 0.15s ease-in-out;
+    background-color: white; 
+}
+
+.text-input:focus {
+    border-color: var(--color-primary); outline: none;
+    box-shadow: 0 0 0 3px rgba(131,71,170,.25); 
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .text-input {
+    padding-right: 40px; 
+}
+
+.input-icon {
+    position: absolute; top: 50%; right: 12px; transform: translateY(-50%);
+    color: var(--color-gray-text); cursor: pointer; font-size: 1rem;
+}
+
+.forgot-password {
+    display: block; text-align: right; font-size: 0.75rem; color: var(--color-link);
+    margin-top: 4px; text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    box-sizing: border-box; width: 100%; padding: 10px 16px; border-radius: 6px;
+    text-align: center; text-decoration: none; cursor: pointer;
+    transition: background-color 0.15s ease-in-out; font-weight: 600; border: none;
+    display: block; 
+}
+
+.btn-primary, .social-icon {
+    background-color: var(--color-primary); color: white; 
+}
+
+.btn-primary:hover {
+    background-color: #6f388b; 
+}
+
+.btn-secondary {
+    margin-top: 12px; background-color: var(--color-secondary); color: white; 
+}
+
+.btn-secondary:hover {
+    background-color: #2be6c9; 
+}
+
+.social-login {
+    margin-top: 24px;
+}
+
+.social-title {
+    display: flex; align-items: center; text-align: center; font-size: 0.875rem;
+    color: var(--color-gray-text); margin-bottom: 12px; font-weight: 600;
+}
+
+.social-title::before, .social-title::after {
+    content: ''; flex: 1; height: 1px; background-color: var(--color-divider);
+}
+
+.social-title::before {
+    margin-right: 15px; 
+}
+
+.social-title::after {
+    margin-left: 15px; 
+}
+
+.social-icons {
+    display: flex; justify-content: center; gap: 1rem; margin-bottom: 16px; 
+}
+
+.social-icon {
+    width: 40px; height: 40px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 1.25rem; 
+    cursor: pointer; transition: transform 0.2s; text-decoration: none; 
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.footer-text {
+    font-size: 0.75rem; color: #4b5563; margin-top: 16px; text-align: center;
+}
+
+/* ============================================= */
+/* ESTILOS PARA MENSAGENS DE ALERTA (req.flash) */
+/* ============================================= */
+
+.message-container {
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.alert {
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 0.875rem;
+    text-align: left;
+    border: 1px solid transparent; /* Base para todos os alertas */
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}

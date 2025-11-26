@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Proposta de Troca</title>
+    <link rel="stylesheet" href="/css/sidebar.css"> 
+    <link rel="stylesheet" href="/css/proporTroca.css">
+</head>
+<body>
+    <div class="app-layout">
+        <%- include('partials/_sidebar') %>
+        <div class="content-area">
+            <h1>Proposta de Troca</h1>
+            <p>Você está prestes a enviar uma proposta de troca para <strong><%= itemDesejado.usuario.nome %></strong>.</p>
+            <hr>
+            <% if (messages && Object.keys(messages).length > 0) { %>
+                <div class="message-container">
+                    <% if (messages.error) { %>
+                        <% messages.error.forEach(function(msg) { %>
+                            <div class="alert alert-danger"><%= msg %></div>
+                        <% }); %>
+                    <% } %>
+                    <% if (messages.success) { %>
+                        <% messages.success.forEach(function(msg) { %>
+                            <div class="alert alert-success"><%= msg %></div>
+                        <% }); %>
+                    <% } %>
+                    <% if (messages.warning) { %>
+                        <% messages.warning.forEach(function(msg) { %>
+                            <div class="alert alert-warning"><%= msg %></div>
+                        <% }); %>
+                    <% } %>
+                </div>
+            <% } %>
+            <div class="proposta-container">
+                <section class="item-desejado-card">
+                    <h2>Item que você quer receber:</h2>
+                    <div style="margin-bottom: 15px; background-color: #eee; text-align: center; padding: 10px; border-radius: 5px; height: 200px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+                        <% if (itemDesejado.imagemPrincipal && itemDesejado.imagemPrincipal.caminho_arquivo) { %>
+                            <img 
+                                src="<%= itemDesejado.imagemPrincipal.caminho_arquivo %>" 
+                                alt="<%= itemDesejado.peca %>"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;"
+                            >
+                        <% } else { %>
+                            [IMAGEM indisponível para <%= itemDesejado.peca %>]
+                        <% } %>
+                    </div>
+                    <div class="item-info">
+                        <ul>
+                            <li>Peça: <strong><%= itemDesejado.peca %></strong></li>
+                            <hr>
+                            <li>Gênero: <strong><%= itemDesejado.tipo %></strong></li> 
+                            <hr>
+                            <li>Tamanho: <strong><%= itemDesejado.tamanho %></strong></li>
+                            <hr>
+                            <li>Condição: <strong><%= itemDesejado.condicao %></strong></li>
+                            <hr>
+                            <li>Cor: <strong><%= itemDesejado.cor || 'Não especificada' %></strong></li>
+                            <hr>
+                            <li>Dono: <strong><%= itemDesejado.usuario.nome %></strong></li>
+                            <hr>
+                            <li>Descrição: <strong><%= itemDesejado.descricao || 'Nenhuma descrição detalhada.' %></strong></li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="item-oferecido-form">
+                    <h2>Peça que você oferece:</h2>
+                    <form action="/trocas/propor" method="POST">
+                        <input type="hidden" name="itemIdDesejado" value="<%= itemDesejado.id %>">
+                        <% 
+                            const itensDoUsuario = typeof meusItens !== 'undefined' ? meusItens : [];
+                            const roupasDisponiveis = itensDoUsuario.filter(item => item.statusPosse === 'Ativo');
+                        %>
+                        <% if (roupasDisponiveis && roupasDisponiveis.length > 0) { %>
+                            <p>Escolha um item da sua lista para oferecer em troca:</p>
+                            <div class="lista-de-pecas-oferecer">
+                                <% roupasDisponiveis.forEach(function(item) { %>
+                                    <label class="item-card-oferta" for="peca-<%= item.id %>">
+                                        <input 
+                                            type="radio" 
+                                            name="itemOferecido" 
+                                            id="peca-<%= item.id %>" 
+                                            value="<%= item.id %>" 
+                                            required 
+                                        >
+                                        <div class="card-conteudo">
+                                            <div class="card-imagem" style="height: 120px; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; border-radius: 4px; overflow: hidden;">
+                                                <% if (item.imagemPrincipal && item.imagemPrincipal.caminho_arquivo) { %>
+                                                    <img 
+                                                        src="<%= item.imagemPrincipal.caminho_arquivo %>" 
+                                                        alt="<%= item.peca %>"
+                                                        style="width: 100%; height: 100%; object-fit: cover;"
+                                                    >
+                                                <% } else { %>
+                                                    [Foto]
+                                                <% } %>
+                                            </div>
+                                            <p><strong><%= item.peca %></strong></p>
+                                            <p>Tam: <%= item.tamanho %></p>
+                                            <p class="condicao"><%= item.condicao %></p>
+                                        </div>
+                                    </label>
+                                <% }); %>
+                            </div>
+                            <button type="submit" class="btn-enviar-proposta">
+                                ENVIAR PROPOSTA DE TROCA
+                            </button>
+                        <% } else { %>
+                            <div class="alert alert-warning">
+                                <p>Você não possui itens disponíveis para oferecer em troca.</p>
+                                <p>Cadastre uma peça ou verifique o status das suas peças na seção <a href="/roupas">"roupas"</a>.</p>
+                            </div>
+                            <a href="/roupas" class="link-cadastro-peca">
+                                Cadastrar Minha Primeira Peça
+                            </a>
+                        <% } %>
+                    </form>
+                </section>
+            </div>
+            <p style="margin-top: 30px;">
+                <a href="/feed">Voltar ao feed</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
